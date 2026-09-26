@@ -1,0 +1,45 @@
+// Flat NFC equipment scanning target
+// Thin nonmetallic label patch with readable equipment-tap instruction.
+@settings(defaultLengthUnit = mm, kclVersion = 2.0)
+
+import roundedBlock from "primitives.kcl"
+import inkLine from "markings.kcl"
+targetPlate = roundedBlock(
+  width = 38mm,
+  height = 30mm,
+  depth = 0.25mm,
+  corner = 4mm,
+)
+  |> appearance(color = "#253D40", roughness = 85)
+nfcText = inkLine(
+  letters = ["N", "F", "C"],
+  letterHeight = 4mm,
+  offsetX = -5.3mm,
+  offsetY = 6.3mm,
+  level = 0.25mm,
+)
+tapText = inkLine(
+  letters = ["T", "A", "P"],
+  letterHeight = 3mm,
+  offsetX = -4mm,
+  offsetY = -0.7mm,
+  level = 0.25mm,
+)
+equipmentText = inkLine(
+  letters = [
+    "E",
+    "Q",
+    "U",
+    "I",
+    "P",
+    "M",
+    "E",
+    "N",
+    "T"
+  ],
+  letterHeight = 3mm,
+  offsetX = -13mm,
+  offsetY = -7mm,
+  level = 0.25mm,
+)
+allBodies = concat(concat(concat([targetPlate], items = nfcText), items = tapText), items = equipmentText)

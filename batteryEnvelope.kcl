@@ -1,0 +1,15 @@
+// Battery packaging envelope
+// Provisional LiPo bay; capacity and swelling allowance require cell selection.
+@settings(defaultLengthUnit = mm, kclVersion = 2.0)
+
+import roundedBlock from "primitives.kcl"
+cellWidth = 32mm
+cellLength = 30mm
+cellThickness = 5mm
+batteryEnvelope = roundedBlock(
+  width = cellWidth,
+  height = cellLength,
+  depth = cellThickness,
+  corner = 2mm,
+)
+  |> appearance(color = "#B9BDC4", roughness = 45)

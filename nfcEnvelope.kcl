@@ -1,0 +1,15 @@
+// NFC packaging envelope
+// Provisional low-profile PN532 module clearance, not an antenna model.
+@settings(defaultLengthUnit = mm, kclVersion = 2.0)
+
+import roundedBlock from "primitives.kcl"
+moduleWidth = 42mm
+moduleHeight = 40mm
+moduleDepth = 3mm
+nfcEnvelope = roundedBlock(
+  width = moduleWidth,
+  height = moduleHeight,
+  depth = moduleDepth,
+  corner = 1mm,
+)
+  |> appearance(color = "#305DA0", roughness = 60)

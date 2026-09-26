@@ -1,0 +1,10 @@
+// Status light pipe
+// Flanged lens insert within the four millimeter LED window.
+@settings(defaultLengthUnit = mm, kclVersion = 2.0)
+
+import roundPost from "primitives.kcl"
+flange = roundPost(postDiameter = 5.5mm, depth = 1mm)
+lens = roundPost(postDiameter = 3.8mm, depth = 2.4mm)
+  |> translate(z = 0.8mm, global = true)
+lightPipe = union([flange, lens])
+  |> appearance(color = "#46DDD3", roughness = 20)

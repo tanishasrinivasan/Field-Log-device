@@ -1,0 +1,12 @@
+// Acoustic backing membrane allowance
+// Thin protected acoustic layer; material and sealing remain to be specified.
+@settings(defaultLengthUnit = mm, kclVersion = 2.0)
+
+import roundedBlock from "primitives.kcl"
+acousticBacking = roundedBlock(
+  width = 35mm,
+  height = 13mm,
+  depth = 0.3mm,
+  corner = 3mm,
+)
+  |> appearance(color = "#465558", roughness = 95)

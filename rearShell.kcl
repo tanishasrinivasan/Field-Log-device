@@ -1,0 +1,130 @@
+// Offshore rear housing
+// Deep tray with four assembly pillars, side control and protected lower charging access.
+@settings(defaultLengthUnit = mm, kclVersion = 2.0)
+
+import roundedBlock, roundPost from "primitives.kcl"
+caseWidth = 60mm
+caseHeight = 105mm
+rearDepth = 14mm
+wall = 2mm
+outer = roundedBlock(
+  width = caseWidth,
+  height = caseHeight,
+  depth = rearDepth,
+  corner = 10mm,
+)
+cavity = roundedBlock(
+  width = caseWidth - (2 * wall),
+  height = caseHeight - (2 * wall),
+  depth = rearDepth,
+  corner = 8mm,
+)
+  |> translate(z = wall, global = true)
+tray = subtract([outer], tools = [cavity])
+boss = roundPost(postDiameter = 7mm, depth = 13mm)
+  |> translate(
+       x = -22mm,
+       y = -44mm,
+       z = 1mm,
+       global = true,
+     )
+bossRow = patternLinear3d(
+  boss,
+  instances = 2,
+  distance = 44mm,
+  axis = [1, 0, 0],
+)
+bosses = patternLinear3d(
+  bossRow,
+  instances = 2,
+  distance = 88mm,
+  axis = [0, 1, 0],
+)
+withBosses = union(concat([tray], items = bosses), legacyMethod = true)
+magnetBacking = roundPost(postDiameter = 24mm, depth = 5mm)
+  |> translate(y = 20mm, global = true)
+clipMount = roundedBlock(
+  width = 28mm,
+  height = 10mm,
+  depth = 5mm,
+  corner = 3mm,
+)
+  |> translate(y = 42mm, global = true)
+reinforcedTray = union([withBosses, magnetBacking, clipMount])
+clearance = roundPost(postDiameter = 2.8mm, depth = 16mm)
+  |> translate(
+       x = -22mm,
+       y = -44mm,
+       z = -1mm,
+       global = true,
+     )
+clearanceRow = patternLinear3d(
+  clearance,
+  instances = 2,
+  distance = 44mm,
+  axis = [1, 0, 0],
+)
+clearanceTools = patternLinear3d(
+  clearanceRow,
+  instances = 2,
+  distance = 88mm,
+  axis = [0, 1, 0],
+)
+head = roundPost(postDiameter = 5.2mm, depth = 2.4mm)
+  |> translate(
+       x = -22mm,
+       y = -44mm,
+       z = -1mm,
+       global = true,
+     )
+headRow = patternLinear3d(
+  head,
+  instances = 2,
+  distance = 44mm,
+  axis = [1, 0, 0],
+)
+headTools = patternLinear3d(
+  headRow,
+  instances = 2,
+  distance = 88mm,
+  axis = [0, 1, 0],
+)
+withFasteners = subtract([reinforcedTray], tools = concat(clearanceTools, items = headTools), legacyMethod = true)
+magnetPocket = roundPost(postDiameter = 20mm, depth = 4mm)
+  |> translate(y = 20mm, z = -1mm, global = true)
+clipPilot = roundPost(postDiameter = 2.05mm, depth = 4.5mm)
+  |> translate(
+       x = -9mm,
+       y = 42mm,
+       z = -1mm,
+       global = true,
+     )
+clipPilots = patternLinear3d(
+  clipPilot,
+  instances = 2,
+  distance = 18mm,
+  axis = [1, 0, 0],
+)
+usbOpening = roundedBlock(
+  width = 10mm,
+  height = 4mm,
+  depth = 6mm,
+  corner = 1.5mm,
+)
+  |> rotate(axis = [1, 0, 0], angle = 90deg, global = true)
+  |> translate(y = -49mm, z = 8mm, global = true)
+sideOpening = roundedBlock(
+  width = 8.6mm,
+  height = 30.6mm,
+  depth = 6mm,
+  corner = 2.5mm,
+)
+  |> rotate(axis = [0, 1, 0], angle = -90deg, global = true)
+  |> translate(
+       x = -26mm,
+       y = 6mm,
+       z = 8mm,
+       global = true,
+     )
+rearShell = subtract([withFasteners], tools = concat([magnetPocket, usbOpening, sideOpening], items = clipPilots), legacyMethod = true)
+  |> appearance(color = "#37454F", roughness = 80)

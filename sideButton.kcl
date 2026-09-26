@@ -1,0 +1,34 @@
+// Refined side reporting control
+// Capsule paddle with five evenly spaced grip bars and original retaining flange.
+@settings(defaultLengthUnit = mm, kclVersion = 2.0)
+
+import roundedBlock from "primitives.kcl"
+flange = roundedBlock(
+  width = 11mm,
+  height = 34mm,
+  depth = 1mm,
+  corner = 3mm,
+)
+  |> translate(z = -1mm, global = true)
+paddle = roundedBlock(
+  width = 8mm,
+  height = 30mm,
+  depth = 3.4mm,
+  corner = 3.8mm,
+)
+blank = union([flange, paddle])
+rib = roundedBlock(
+  width = 5.4mm,
+  height = 1.6mm,
+  depth = 0.7mm,
+  corner = 0.75mm,
+)
+  |> translate(y = -7.2mm, z = 3mm, global = true)
+ribs = patternLinear3d(
+  rib,
+  instances = 5,
+  distance = 3.6mm,
+  axis = [0, 1, 0],
+)
+sideButton = union(concat([blank], items = ribs), legacyMethod = true)
+  |> appearance(color = "#E5A332", roughness = 65)

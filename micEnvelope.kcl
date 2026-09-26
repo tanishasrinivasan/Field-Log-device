@@ -1,0 +1,12 @@
+// Microphone packaging envelope
+// Provisional I2S MEMS module beneath the top acoustic holes.
+@settings(defaultLengthUnit = mm, kclVersion = 2.0)
+
+import roundedBlock from "primitives.kcl"
+micEnvelope = roundedBlock(
+  width = 14mm,
+  height = 10mm,
+  depth = 2mm,
+  corner = 1mm,
+)
+  |> appearance(color = "#9360AC", roughness = 65)

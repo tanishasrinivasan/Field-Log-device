@@ -1,0 +1,58 @@
+// Reinforced belt and vest clip
+// Wide removable leaf with stiffening ribs, raised root and retention toe.
+@settings(defaultLengthUnit = mm, kclVersion = 2.0)
+
+import roundedBlock, roundPost from "primitives.kcl"
+clipWidth = 30mm
+clipLength = 54mm
+leaf = roundedBlock(
+  width = clipWidth,
+  height = clipLength,
+  depth = 3.5mm,
+  corner = 5mm,
+)
+root = roundedBlock(
+  width = clipWidth,
+  height = 12mm,
+  depth = 4.5mm,
+  corner = 4mm,
+)
+  |> translate(y = 20mm, z = 3mm, global = true)
+toe = roundedBlock(
+  width = 25mm,
+  height = 6mm,
+  depth = 2.5mm,
+  corner = 2.5mm,
+)
+  |> translate(y = -22mm, z = 3mm, global = true)
+blank = union([leaf, root, toe])
+ribLeft = roundedBlock(
+  width = 2.5mm,
+  height = 32mm,
+  depth = 1.5mm,
+  corner = 1mm,
+)
+  |> translate(
+       x = -10mm,
+       y = -1mm,
+       z = 3mm,
+       global = true,
+     )
+ribRight = clone(ribLeft)
+  |> translate(x = 20mm, global = true)
+reinforced = union([blank, ribLeft, ribRight])
+mountHole = roundPost(postDiameter = 2.8mm, depth = 10mm)
+  |> translate(
+       x = -9mm,
+       y = 20mm,
+       z = -1mm,
+       global = true,
+     )
+mountHoles = patternLinear3d(
+  mountHole,
+  instances = 2,
+  distance = 18mm,
+  axis = [1, 0, 0],
+)
+beltClip = subtract([reinforced], tools = mountHoles, legacyMethod = true)
+  |> appearance(color = "#151E25", roughness = 85)

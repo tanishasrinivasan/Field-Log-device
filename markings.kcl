@@ -1,0 +1,202 @@
+// Simple geometric equipment markings
+// Hand-defined stroke glyphs for static display mockups and printed legends.
+@settings(defaultLengthUnit = mm, kclVersion = 2.0)
+
+export fn inkStroke(coords, letterHeight, offsetX, offsetY, level) {
+  dx = (coords[2] - coords[0]) * letterHeight / 3
+  dy = (coords[3] - coords[1]) * letterHeight / 3
+  strokeLength = sqrt((dx / 1mm) ^ 2 + (dy / 1mm) ^ 2) * 1mm
+  strokeWidth = letterHeight / 10
+  outline = sketch(on = XY) {
+    bottom = line(start = [var 0mm, var -0.15mm], end = [var 2mm, var -0.15mm])
+    right = line(start = [var 2mm, var -0.15mm], end = [var 2mm, var 0.15mm])
+    top = line(start = [var 2mm, var 0.15mm], end = [var 0mm, var 0.15mm])
+    left = line(start = [var 0mm, var 0.15mm], end = [var 0mm, var -0.15mm])
+    coincident([bottom.end, right.start])
+    coincident([right.end, top.start])
+    coincident([top.end, left.start])
+    coincident([left.end, bottom.start])
+    horizontal(bottom)
+    horizontal(top)
+    vertical(left)
+    vertical(right)
+    horizontalDistance([ORIGIN, bottom.start]) == 0mm
+    verticalDistance([ORIGIN, bottom.start]) == -strokeWidth / 2
+    distance([bottom.start, bottom.end]) == strokeLength
+    distance([right.start, right.end]) == strokeWidth
+  }
+  ink = extrude(region(segments = [outline.bottom, outline.right], intersectionIndex = -1, direction = CCW), length = 0.04mm)
+    |> rotate(axis = [0, 0, 1], angle = atan2(y = dy, x = dx), global = true)
+    |> translate(
+         x = offsetX + coords[0] * letterHeight / 3,
+         y = offsetY + coords[1] * letterHeight / 3,
+         z = level,
+         global = true,
+       )
+    |> appearance(color = "#E8F3D7", roughness = 65)
+  hide(outline)
+  return ink
+}
+export fn inkGlyph(letter, letterHeight, offsetX, offsetY, level) {
+  strokes = if letter == "A" {
+    [
+      [0, 0, 1, 3],
+      [1, 3, 2, 0],
+      [0.5, 1.5, 1.5, 1.5]
+    ]
+  } else if letter == "T" {
+    [[0, 3, 2, 3], [1, 3, 1, 0]]
+  } else if letter == "P" {
+    [
+      [0, 0, 0, 3],
+      [0, 3, 2, 3],
+      [2, 3, 2, 1.5],
+      [2, 1.5, 0, 1.5]
+    ]
+  } else if letter == "E" {
+    [
+      [0, 0, 0, 3],
+      [0, 3, 2, 3],
+      [0, 1.5, 1.7, 1.5],
+      [0, 0, 2, 0]
+    ]
+  } else if letter == "Q" {
+    [
+      [0, 0, 0, 3],
+      [0, 3, 2, 3],
+      [2, 3, 2, 0],
+      [2, 0, 0, 0],
+      [1, 1, 2.4, -0.4]
+    ]
+  } else if letter == "U" {
+    [
+      [0, 3, 0, 0],
+      [0, 0, 2, 0],
+      [2, 0, 2, 3]
+    ]
+  } else if letter == "I" {
+    [
+      [0, 3, 2, 3],
+      [1, 3, 1, 0],
+      [0, 0, 2, 0]
+    ]
+  } else if letter == "M" {
+    [
+      [0, 0, 0, 3],
+      [0, 3, 1, 1.5],
+      [1, 1.5, 2, 3],
+      [2, 3, 2, 0]
+    ]
+  } else if letter == "N" {
+    [
+      [0, 0, 0, 3],
+      [0, 3, 2, 0],
+      [2, 0, 2, 3]
+    ]
+  } else if letter == "F" {
+    [
+      [0, 0, 0, 3],
+      [0, 3, 2, 3],
+      [0, 1.5, 1.7, 1.5]
+    ]
+  } else if letter == "L" {
+    [[0, 3, 0, 0], [0, 0, 2, 0]]
+  } else if letter == "G" {
+    [
+      [2, 3, 0, 3],
+      [0, 3, 0, 0],
+      [0, 0, 2, 0],
+      [2, 0, 2, 1.5],
+      [2, 1.5, 1, 1.5]
+    ]
+  } else if letter == "S" {
+    [
+      [2, 3, 0, 3],
+      [0, 3, 0, 1.5],
+      [0, 1.5, 2, 1.5],
+      [2, 1.5, 2, 0],
+      [2, 0, 0, 0]
+    ]
+  } else if letter == "R" {
+    [
+      [0, 0, 0, 3],
+      [0, 3, 2, 3],
+      [2, 3, 2, 1.5],
+      [2, 1.5, 0, 1.5],
+      [0, 1.5, 2, 0]
+    ]
+  } else if letter == "C" {
+    [
+      [2, 3, 0, 3],
+      [0, 3, 0, 0],
+      [0, 0, 2, 0]
+    ]
+  } else if letter == "1" {
+    [
+      [0.5, 2.5, 1, 3],
+      [1, 3, 1, 0],
+      [0, 0, 2, 0]
+    ]
+  } else if letter == "2" {
+    [
+      [0, 3, 2, 3],
+      [2, 3, 2, 1.5],
+      [2, 1.5, 0, 1.5],
+      [0, 1.5, 0, 0],
+      [0, 0, 2, 0]
+    ]
+  } else if letter == "4" {
+    [
+      [0, 3, 0, 1.5],
+      [0, 1.5, 2, 1.5],
+      [2, 3, 2, 0]
+    ]
+  } else if letter == "8" {
+    [
+      [0, 0, 0, 3],
+      [0, 3, 2, 3],
+      [2, 3, 2, 0],
+      [2, 0, 0, 0],
+      [0, 1.5, 2, 1.5]
+    ]
+  } else if letter == "0" {
+    [
+      [0, 0, 0, 3],
+      [0, 3, 2, 3],
+      [2, 3, 2, 0],
+      [2, 0, 0, 0]
+    ]
+  } else if letter == "-" {
+    [[0, 1.5, 2, 1.5]]
+  } else {
+    [[1, 2.2, 1, 2.5], [1, 0.5, 1, 0.8]]
+  }
+  return map(
+    strokes,
+    f = fn(@segment) {
+      return inkStroke(
+        coords = segment,
+        letterHeight = letterHeight,
+        offsetX = offsetX,
+        offsetY = offsetY,
+        level = level,
+      )
+    },
+  )
+}
+export fn inkLine(letters, letterHeight, offsetX, offsetY, level) {
+  return reduce(
+    [0 ..< count(letters)],
+    initial = [],
+    f = fn(@index, accum) {
+      glyph = inkGlyph(
+        letter = letters[index],
+        letterHeight = letterHeight,
+        offsetX = offsetX + index * letterHeight,
+        offsetY = offsetY,
+        level = level,
+      )
+      return concat(accum, items = glyph)
+    },
+  )
+}

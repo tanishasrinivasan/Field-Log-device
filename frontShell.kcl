@@ -1,0 +1,102 @@
+// Guarded front housing
+// Recessed display and controls inside a two millimeter raised perimeter.
+@settings(defaultLengthUnit = mm, kclVersion = 2.0)
+
+import roundedBlock, roundPost from "primitives.kcl"
+caseWidth = 60mm
+caseHeight = 105mm
+frontDepth = 10mm
+wall = 2mm
+outer = roundedBlock(
+  width = caseWidth,
+  height = caseHeight,
+  depth = frontDepth,
+  corner = 10mm,
+)
+cavity = roundedBlock(
+  width = caseWidth - (2 * wall),
+  height = caseHeight - (2 * wall),
+  depth = 7mm,
+  corner = 8mm,
+)
+  |> translate(z = -1mm, global = true)
+faceRecess = roundedBlock(
+  width = 52mm,
+  height = 97mm,
+  depth = 3mm,
+  corner = 6mm,
+)
+  |> translate(z = 8mm, global = true)
+cover = subtract([outer], tools = [cavity, faceRecess], legacyMethod = true)
+boss = roundPost(postDiameter = 7mm, depth = 7mm)
+  |> translate(x = -22mm, y = -44mm, global = true)
+bossRow = patternLinear3d(
+  boss,
+  instances = 2,
+  distance = 44mm,
+  axis = [1, 0, 0],
+)
+bosses = patternLinear3d(
+  bossRow,
+  instances = 2,
+  distance = 88mm,
+  axis = [0, 1, 0],
+)
+reinforcedCover = union(concat([cover], items = bosses), legacyMethod = true)
+pilot = roundPost(postDiameter = 2.05mm, depth = 6.1mm)
+  |> translate(
+       x = -22mm,
+       y = -44mm,
+       z = -0.1mm,
+       global = true,
+     )
+pilotRow = patternLinear3d(
+  pilot,
+  instances = 2,
+  distance = 44mm,
+  axis = [1, 0, 0],
+)
+pilots = patternLinear3d(
+  pilotRow,
+  instances = 2,
+  distance = 88mm,
+  axis = [0, 1, 0],
+)
+withPilots = subtract([reinforcedCover], tools = pilots, legacyMethod = true)
+recordSurround = roundPost(postDiameter = 42mm, depth = 0.8mm)
+  |> translate(z = 7.8mm, global = true)
+guardedCover = union([withPilots, recordSurround])
+recordOpening = roundPost(postDiameter = 38.6mm, depth = 5mm)
+  |> translate(z = 5mm, global = true)
+flagOpening = roundedBlock(
+  width = 32.6mm,
+  height = 10.6mm,
+  depth = 5mm,
+  corner = 5.1mm,
+)
+  |> translate(y = -27mm, z = 5mm, global = true)
+displayOpening = roundedBlock(
+  width = 38.4mm,
+  height = 18.4mm,
+  depth = 5mm,
+  corner = 2mm,
+)
+  |> translate(y = 33mm, z = 5mm, global = true)
+grilleOpening = roundedBlock(
+  width = 34.4mm,
+  height = 12.4mm,
+  depth = 5mm,
+  corner = 3mm,
+)
+  |> translate(y = -41mm, z = 5mm, global = true)
+frontShell = subtract(
+  [guardedCover],
+  tools = [
+    recordOpening,
+    flagOpening,
+    displayOpening,
+    grilleOpening
+  ],
+  legacyMethod = true,
+)
+  |> appearance(color = "#27343D", roughness = 80)

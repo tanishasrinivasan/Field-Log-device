@@ -1,0 +1,8 @@
+title = "MVP one"
+default_file = "main.kcl"
+
+[settings.app]
+[settings.meta]
+id = "06fd7aaa-8207-4eff-9e6f-74a28332dd75"
+
+[settings.modeling]

@@ -1,0 +1,49 @@
+// Parametric enclosure primitives
+// Repeated dimension-driven profiles for shells and hardware.
+@settings(defaultLengthUnit = mm, kclVersion = 2.0)
+
+export fn roundedBlock(width, height, depth, corner) {
+  outline = sketch(on = XY) {
+    bottom = line(start = [var -40mm, var -27.5mm], end = [var 40mm, var -27.5mm])
+    right = line(start = [var 40mm, var -27.5mm], end = [var 40mm, var 27.5mm])
+    top = line(start = [var 40mm, var 27.5mm], end = [var -40mm, var 27.5mm])
+    left = line(start = [var -40mm, var 27.5mm], end = [var -40mm, var -27.5mm])
+    coincident([bottom.end, right.start])
+    coincident([right.end, top.start])
+    coincident([top.end, left.start])
+    coincident([left.end, bottom.start])
+    horizontal(bottom)
+    horizontal(top)
+    vertical(left)
+    vertical(right)
+    horizontalDistance([ORIGIN, bottom.start]) == -width / 2
+    verticalDistance([ORIGIN, bottom.start]) == -height / 2
+    distance([bottom.start, bottom.end]) == width
+    distance([right.start, right.end]) == height
+  }
+  face = region(segments = [outline.bottom, outline.right], intersectionIndex = -1, direction = CCW)
+  block = extrude(face, length = depth)
+    |> fillet(
+         radius = corner,
+         tags = [
+           getCommonEdge(faces = [face.tags.bottom, face.tags.right]),
+           getCommonEdge(faces = [face.tags.right, face.tags.top]),
+           getCommonEdge(faces = [face.tags.top, face.tags.left]),
+           getCommonEdge(faces = [face.tags.left, face.tags.bottom])
+         ],
+       )
+  hide(outline)
+  return block
+}
+
+export fn roundPost(postDiameter, depth) {
+  profile = sketch(on = XY) {
+    rim = circle(center = [var 0mm, var 0mm], start = [var 3mm, var 0mm])
+    coincident([rim.center, ORIGIN])
+    radius(rim) == postDiameter / 2
+    horizontal([rim.center, rim.start])
+  }
+  post = extrude(region(segments = [profile.rim]), length = depth)
+  hide(profile)
+  return post
+}

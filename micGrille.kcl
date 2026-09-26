@@ -1,0 +1,34 @@
+// Protected lower microphone grille
+// Four balanced rounded acoustic slots with a continuous mounting flange.
+@settings(defaultLengthUnit = mm, kclVersion = 2.0)
+
+import roundedBlock from "primitives.kcl"
+flange = roundedBlock(
+  width = 37mm,
+  height = 14mm,
+  depth = 1mm,
+  corner = 3mm,
+)
+face = roundedBlock(
+  width = 34mm,
+  height = 12mm,
+  depth = 2.7mm,
+  corner = 3mm,
+)
+  |> translate(z = 0.8mm, global = true)
+blank = union([flange, face])
+slot = roundedBlock(
+  width = 27mm,
+  height = 1.4mm,
+  depth = 5mm,
+  corner = 0.65mm,
+)
+  |> translate(y = -3.6mm, z = -0.5mm, global = true)
+slots = patternLinear3d(
+  slot,
+  instances = 4,
+  distance = 2.4mm,
+  axis = [0, 1, 0],
+)
+micGrille = subtract([blank], tools = slots, legacyMethod = true)
+  |> appearance(color = "#24282C", roughness = 80)

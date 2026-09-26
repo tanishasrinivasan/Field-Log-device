@@ -1,0 +1,67 @@
+// Technician status display
+// Static illustrative asset identifier, time and recording indicator on a retained display window.
+@settings(defaultLengthUnit = mm, kclVersion = 2.0)
+
+import roundedBlock, roundPost from "primitives.kcl"
+import inkLine from "markings.kcl"
+flange = roundedBlock(
+  width = 39.6mm,
+  height = 19.6mm,
+  depth = 1mm,
+  corner = 3mm,
+)
+window = roundedBlock(
+  width = 38mm,
+  height = 18mm,
+  depth = 2.4mm,
+  corner = 2mm,
+)
+  |> translate(z = 0.8mm, global = true)
+displayBody = union([flange, window])
+  |> appearance(color = "#151719", roughness = 20)
+bezelBlank = roundedBlock(
+  width = 38mm,
+  height = 18mm,
+  depth = 0.5mm,
+  corner = 2mm,
+)
+  |> translate(z = 3.15mm, global = true)
+bezelOpening = roundedBlock(
+  width = 34mm,
+  height = 14mm,
+  depth = 1mm,
+  corner = 1.5mm,
+)
+  |> translate(z = 3mm, global = true)
+bezel = subtract([bezelBlank], tools = [bezelOpening])
+  |> appearance(color = "#24282C", roughness = 65)
+assetText = inkLine(
+  letters = ["A", "-", "1", "0", "4"],
+  letterHeight = 3mm,
+  offsetX = -14mm,
+  offsetY = 2.5mm,
+  level = 3.2mm,
+)
+timeText = inkLine(
+  letters = ["1", "2", ":", "4", "8"],
+  letterHeight = 3mm,
+  offsetX = -14mm,
+  offsetY = -4.5mm,
+  level = 3.2mm,
+)
+recordText = inkLine(
+  letters = ["R", "E", "C"],
+  letterHeight = 2.5mm,
+  offsetX = 6mm,
+  offsetY = -4.5mm,
+  level = 3.2mm,
+)
+recordDot = roundPost(postDiameter = 1.5mm, depth = 0.04mm)
+  |> translate(
+       x = 3.5mm,
+       y = -3.25mm,
+       z = 3.2mm,
+       global = true,
+     )
+  |> appearance(color = "#DADDE0", roughness = 40)
+allBodies = concat(concat(concat([displayBody, bezel, recordDot], items = assetText), items = timeText), items = recordText)

@@ -1,0 +1,29 @@
+// Rounded flag control
+// Retained graphite pill button with a single centered FLAG legend.
+@settings(defaultLengthUnit = mm, kclVersion = 2.0)
+
+import roundedBlock from "primitives.kcl"
+import inkLine from "markings.kcl"
+flange = roundedBlock(
+  width = 35mm,
+  height = 13mm,
+  depth = 1mm,
+  corner = 3mm,
+)
+cap = roundedBlock(
+  width = 32mm,
+  height = 10mm,
+  depth = 3.6mm,
+  corner = 4.8mm,
+)
+  |> translate(z = 0.8mm, global = true)
+markerButton = union([flange, cap])
+  |> appearance(color = "#24282C", roughness = 70)
+flagLegend = inkLine(
+  letters = ["F", "L", "A", "G"],
+  letterHeight = 3mm,
+  offsetX = -5.5mm,
+  offsetY = -1.5mm,
+  level = 4.4mm,
+)
+allBodies = concat([markerButton], items = flagLegend)

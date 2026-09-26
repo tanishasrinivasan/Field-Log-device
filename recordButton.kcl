@@ -1,0 +1,46 @@
+// Concave push-to-record button
+// Revolved glove-sized cap with retaining flange and spherical finger dish.
+@settings(defaultLengthUnit = mm, kclVersion = 2.0)
+
+buttonRadius = 19mm
+flangeRadius = 20mm
+capHeight = 4.8mm
+dishRadius = 73.25mm
+profile = sketch(on = XZ) {
+  base = line(start = [var 0mm, var 0mm], end = [var 20mm, var 0mm])
+  flangeWall = line(start = [var 20mm, var 0mm], end = [var 20mm, var 1mm])
+  shoulder = line(start = [var 20mm, var 1mm], end = [var 19mm, var 1mm])
+  barrel = line(start = [var 19mm, var 1mm], end = [var 19mm, var 4.8mm])
+  rim = line(start = [var 19mm, var 4.8mm], end = [var 17mm, var 4.8mm])
+  bowl = arc(
+    start = [var 17mm, var 4.8mm],
+    end = [var 0mm, var 2.8mm],
+    center = [var 0mm, var 76.05mm],
+    direction = CW,
+  )
+  axisEdge = line(start = [var 0mm, var 2.8mm], end = [var 0mm, var 0mm])
+  coincident([base.end, flangeWall.start])
+  coincident([flangeWall.end, shoulder.start])
+  coincident([shoulder.end, barrel.start])
+  coincident([barrel.end, rim.start])
+  coincident([rim.end, bowl.start])
+  coincident([bowl.end, axisEdge.start])
+  coincident([axisEdge.end, base.start])
+  coincident([base.start, ORIGIN])
+  horizontal(base)
+  vertical(flangeWall)
+  horizontal(shoulder)
+  vertical(barrel)
+  horizontal(rim)
+  vertical(axisEdge)
+  distance([base.start, base.end]) == flangeRadius
+  distance([flangeWall.start, flangeWall.end]) == 1mm
+  distance([shoulder.start, shoulder.end]) == flangeRadius - buttonRadius
+  distance([barrel.start, barrel.end]) == capHeight - 1mm
+  distance([rim.start, rim.end]) == 2mm
+  horizontalDistance([ORIGIN, bowl.center]) == 0mm
+  radius(bowl) == dishRadius
+}
+cap = revolve(region(segments = [profile.base, profile.flangeWall], intersectionIndex = -1, direction = CCW), axis = Y)
+hide(profile)
+recordButton = appearance(cap, color = "#F06A25", roughness = 65)

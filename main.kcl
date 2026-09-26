@@ -1,0 +1,102 @@
+// Offshore technician field recorder
+// Vertical guarded controls, rear scan target and modular wearable mounting.
+@settings(defaultLengthUnit = mm, kclVersion = 2.0)
+
+import "rearShell.kcl" as rearPart
+import "frontShell.kcl" as frontPart
+import "beltClip.kcl" as clipPart
+import "recordButton.kcl" as recordPart
+import "markerButton.kcl" as flagPart
+import "sideButton.kcl" as sidePart
+import "statusDisplay.kcl" as displayPart
+import "micGrille.kcl" as grillePart
+import "acousticBacking.kcl" as acousticPart
+import "nfcTarget.kcl" as targetPart
+import "espEnvelope.kcl" as espPart
+import "nfcEnvelope.kcl" as nfcPart
+import "batteryEnvelope.kcl" as batteryPart
+import "micEnvelope.kcl" as micPart
+
+explodedOffset = 0mm
+housingColor = "#363B40"
+controlColor = "#24282C"
+rearShell = translate(rearPart, z = 0mm, global = true)
+  |> appearance(color = housingColor, roughness = 75)
+frontShell = translate(frontPart, z = 14mm + 3 * explodedOffset, global = true)
+  |> appearance(color = housingColor, roughness = 75)
+beltClip = translate(
+  clipPart,
+  y = 22mm,
+  z = -7.5mm - explodedOffset,
+  global = true,
+)
+  |> appearance(color = controlColor, roughness = 80)
+recordButton = translate(recordPart, z = 19mm + 4 * explodedOffset, global = true)
+markerButton = translate(
+  flagPart,
+  y = -27mm,
+  z = 19mm + 4 * explodedOffset,
+  global = true,
+)
+sideButton = rotate(
+  sidePart,
+  axis = [0, 1, 0],
+  angle = -90deg,
+  global = true,
+)
+  |> translate(
+       x = -28mm - explodedOffset,
+       y = 6mm,
+       z = 8mm,
+       global = true,
+     )
+  |> appearance(color = controlColor, roughness = 75)
+statusDisplay = translate(
+  displayPart,
+  y = 33mm,
+  z = 19mm + 4 * explodedOffset,
+  global = true,
+)
+micGrille = translate(
+  grillePart,
+  y = -41mm,
+  z = 19mm + 4 * explodedOffset,
+  global = true,
+)
+acousticBacking = translate(
+  acousticPart,
+  y = -41mm,
+  z = 18.7mm + 3 * explodedOffset,
+  global = true,
+)
+nfcTarget = rotate(
+  targetPart,
+  axis = [0, 1, 0],
+  angle = 180deg,
+  global = true,
+)
+  |> translate(y = -26mm, z = -explodedOffset, global = true)
+espEnvelope = translate(
+  espPart,
+  y = 21mm,
+  z = 6mm + explodedOffset,
+  global = true,
+)
+batteryEnvelope = translate(
+  batteryPart,
+  y = -20mm,
+  z = 6.5mm + explodedOffset,
+  global = true,
+)
+nfcEnvelope = translate(
+  nfcPart,
+  y = -20mm,
+  z = 2.5mm + explodedOffset,
+  global = true,
+)
+micEnvelope = translate(
+  micPart,
+  y = -41mm,
+  z = 16mm + 2 * explodedOffset,
+  global = true,
+)

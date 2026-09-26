@@ -1,0 +1,15 @@
+// ESP32 packaging envelope
+// Provisional compact headerless development board clearance, not a PCB replica.
+@settings(defaultLengthUnit = mm, kclVersion = 2.0)
+
+import roundedBlock from "primitives.kcl"
+boardWidth = 26mm
+boardLength = 40mm
+componentHeight = 6mm
+espEnvelope = roundedBlock(
+  width = boardWidth,
+  height = boardLength,
+  depth = componentHeight,
+  corner = 1mm,
+)
+  |> appearance(color = "#278970", roughness = 65)
